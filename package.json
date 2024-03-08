@@ -1,6 +1,8 @@
 {
   "name": "rfid-based-demo",
+  "main": "./public/electron.js",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -10,15 +12,18 @@
     "@types/node": "^16.18.87",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
+    "global-key-listener": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "tailwindcss": "^3.4.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "main": "cross-env NODE_ENV=development nodemon -w ./main/* --ext js,mjs,cjs,json,ts --exec electron .",
+    "build": "react-scripts build && tsc ./main/index.ts --outDir ./build/main",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -39,5 +44,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/electron": "^1.6.10",
+    "cross-env": "^7.0.3",
+    "electron": "^22.3.27",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2"
   }
 }
