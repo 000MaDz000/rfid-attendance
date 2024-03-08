@@ -1,6 +1,6 @@
-type RfidListener = (event: RfidEvent) => void;
+export type RfidListener = (event: RfidEvent) => void;
 
-class RfidEvent {
+export class RfidEvent {
     constructor(public id: string) { }
 }
 
@@ -9,7 +9,7 @@ const callbacksArray: RfidListener[] = [];
 
 class RfidEventListener {
 
-    static on(callback: RfidListener) {
+    static addListener(callback: RfidListener) {
         callbacksArray.push(callback);
         callbacksHashmap.set(callback, callbacksArray.length - 1);
     }
@@ -20,7 +20,7 @@ class RfidEventListener {
         });
     }
 
-    static removeEventListener(listener: RfidListener) {
+    static removeListener(listener: RfidListener) {
         const index = callbacksHashmap.get(listener);
         if (index) {
             callbacksArray.splice(index, 1);
