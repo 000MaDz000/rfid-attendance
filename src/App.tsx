@@ -1,17 +1,28 @@
-import RfidEventListener from './events/rfid';
-import Modal from './components/modal';
-
-RfidEventListener.on((ev) => {
-  alert(ev.id);
-})
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import WaitingCard from './pages/waiting-card';
+import CardPage from './pages/card-page';
+import Sidebar from './components/side-bar';
+import EmployeesPage from './pages/employees';
+import ConfigureCard from './pages/configure-card';
 
 function App() {
+
   return (
-    <div className="App bg-black">
-      <h2 className='text-white'>hello world</h2>
-      <Modal>
-        <h1 className="text-red-600 text-2xl font-bold underline">hello world</h1>
-      </Modal>
+    <div className="App flex" dir='rtl'>
+      <BrowserRouter>
+        <Sidebar />
+
+        <div className='grow'>
+          <Routes>
+            <Route path='/' element={<WaitingCard />} />
+            <Route path='/:cardId' element={<CardPage />} />
+            <Route path='/employees' element={<EmployeesPage />} />
+            <Route path="/configure-card/:cardId" element={<ConfigureCard />} />
+          </Routes>
+        </div>
+
+      </BrowserRouter>
+
     </div>
   );
 }

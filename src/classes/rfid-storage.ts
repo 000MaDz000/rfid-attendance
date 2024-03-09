@@ -9,4 +9,16 @@ export default class RfidStorage {
     static setCardData(id: string, data: object) {
         localStorage.setItem(id, JSON.stringify(data));
     }
+
+    static getAllCards() {
+        const allData = Object.keys(localStorage);
+        const clearedData: string[] = [];
+        allData.forEach(val => {
+            if (val.match(/^000[0-9]{7}$/)) {
+                clearedData.push(val);
+            }
+        });
+
+        return clearedData;
+    }
 }
