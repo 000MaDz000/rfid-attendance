@@ -3,12 +3,12 @@ import { join } from "path"
 import Employee, { EmployeeData } from "./employee";
 import { mkdirSync, readFileSync, writeFileSync } from "fs";
 
-type CardData = {
+export type CardData = {
     id: string;
     employee: string;
 }
 
-type PopulatedCardData = {
+export type PopulatedCardData = {
     employee: EmployeeData | null;
     id: string;
 }

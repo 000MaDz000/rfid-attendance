@@ -1,4 +1,5 @@
 import { BrowserWindow, app } from "electron";
+import "./ipc-data-handler";
 
 const createWindow = () => {
     const window = new BrowserWindow({

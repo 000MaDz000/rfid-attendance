@@ -1,24 +1,15 @@
+import { IpcRenderer } from 'electron';
+import { PopulatedCardData } from "../../main/db-handler/card"
+const ipcRenderer = window.require("electron").ipcRenderer as IpcRenderer;
+
 export default class RfidStorage {
-    static getCardData(id: string | null) {
-        if (!id) return null;
-        const stringData = localStorage.getItem(id);
-        if (!stringData) return null;
-        return JSON.parse(stringData);
+    static async getCardData(id: string | null): Promise<PopulatedCardData> {
+        const cardData = await ipcRenderer.invoke("rfid-data", id);
+        return cardData;
     }
 
-    static setCardData(id: string, data: object) {
-        localStorage.setItem(id, JSON.stringify(data));
-    }
-
-    static getAllCards() {
-        const allData = Object.keys(localStorage);
-        const clearedData: string[] = [];
-        allData.forEach(val => {
-            if (val.match(/^000[0-9]{7}$/)) {
-                clearedData.push(val);
-            }
-        });
-
-        return clearedData;
+    static async setCardData(id: string, employeeId: string): Promise<void> {
+        const result = await ipcRenderer.invoke("configure-card", id, employeeId);
+        return result;
     }
 }
