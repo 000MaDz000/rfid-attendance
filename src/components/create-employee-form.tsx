@@ -1,7 +1,8 @@
 import { FormEventHandler, useRef } from "react";
-import Modal from "./modal";
-import RfidStorage from "../classes/rfid-storage";
+
 import { useNavigate } from "react-router";
+import Employee from "../classes/employee";
+import RfidStorage from "../classes/rfid-storage";
 
 export default function CreateEmployeeForm({ id }: { id: string }) {
     const name = useRef<HTMLInputElement>(null);
@@ -13,21 +14,24 @@ export default function CreateEmployeeForm({ id }: { id: string }) {
 
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        RfidStorage.setCardData(id, {
-            name: name.current?.value,
-            nationalId: nationalId.current?.value,
-            birthDate: birthDate.current?.value,
-            address: address.current?.value,
-            branch: branch.current?.value,
-        });
 
-        navigate("/" + id);
+        Employee.create({
+            "name": name.current?.value as string,
+            "address": address.current?.value as string,
+            "nationalId": nationalId.current?.value as string,
+            branch: branch.current?.value as string,
+            "birthDate": new Date(birthDate.current?.value as string)
+        }).then((result) => {
+
+            return RfidStorage.setCardData(id, result.id).then(() => {
+                navigate("/employees/" + result.id);
+            });
+        });
     }
 
     return (
-        <Modal>
-            <h1>يمكنك تجاهل الواجهة اذا لم تكن تريد تسجيل الكارت</h1>
-            <form className="flex flex-col gap-3 bg-gray-50 m-auto w-[50vw] p-2" onSubmit={onSubmit}>
+        <>
+            <form className="flex flex-col gap-3 bg-gray-100 rounded-md m-auto w-[50vw] p-2" onSubmit={onSubmit}>
                 <input ref={name} placeholder="الاسم" className="shadow-sm p-2" />
                 <input ref={nationalId} placeholder="الرقم القومي" className="shadow-sm p-2" />
                 <input ref={birthDate} placeholder="تاريخ الميلاد" type="date" className="shadow-sm p-2" />
@@ -35,6 +39,6 @@ export default function CreateEmployeeForm({ id }: { id: string }) {
                 <input ref={branch} placeholder="الفرع التابع له" className="shadow-sm p-2" />
                 <input type="submit" value="تأكيد" className="cursor-pointer bg-slate-200 p-2" />
             </form>
-        </Modal>
+        </>
     )
 }

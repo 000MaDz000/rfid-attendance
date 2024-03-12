@@ -1,19 +1,23 @@
 import { Link } from "react-router-dom";
-import RfidStorage from "../classes/rfid-storage"
+import { useEffect, useState } from "react";
+import { EmployeeData } from "../../main/db-handler/employee";
+import Employee from "../classes/employee";
 
 export default function EmployeesPage() {
-    const data = RfidStorage.getAllCards();
+    const [data, setData] = useState<EmployeeData[]>([]);
 
-    console.log(data);
+    useEffect(() => {
+        Employee.getEmployees().then(setData);
+    }, []);
 
     return (
-        <div className="h-full flex items-center justify-center">
+        data &&
+        <div className="h-full flex items-start">
 
             <table>
 
                 <thead>
                     <tr>
-                        <th className="p-4">رقم الكارت</th>
                         <th className="p-4">الاسم</th>
                         <th className="p-4">العنوان</th>
                         <th className="p-4">تاريخ الميلاد</th>
@@ -24,17 +28,15 @@ export default function EmployeesPage() {
 
                 <tbody>
                     {
-                        data.map(id => {
-                            const data = RfidStorage.getCardData(id);
+                        data.map(cardData => {
                             return (
                                 <tr>
-                                    <td className="p-4 text-center text-md">{id}</td>
-                                    <td className="p-4 text-center text-md">{data.name}</td>
-                                    <td className="p-4 text-center text-md">{data.address || "-"}</td>
-                                    <td className="p-4 text-center text-md">{data.birthDate ? new Date(data.birthDate).toLocaleDateString("ar-SA") : "-"}</td>
-                                    <td className="p-4 text-center text-md">{data.nationalId || "-"}</td>
+                                    <td className="p-4 text-center text-md">{cardData.name}</td>
+                                    <td className="p-4 text-center text-md">{cardData.address || "-"}</td>
+                                    <td className="p-4 text-center text-md">{cardData.birthDate ? new Date(cardData.birthDate).toLocaleDateString("ar-SA") : "-"}</td>
+                                    <td className="p-4 text-center text-md">{cardData.nationalId || "-"}</td>
                                     <td className="text-center">
-                                        <Link to={`/${id}`} className="p-4 text-md bg-blue-700 cursor-pointer text-white rounded-lg">
+                                        <Link to={`/employees/${cardData.id}`} className="p-4 text-md bg-blue-700 cursor-pointer text-white rounded-lg">
                                             انتقال
                                         </Link>
                                     </td>

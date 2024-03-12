@@ -5,8 +5,8 @@ import { join } from "path";
 
 export type DayData = {
     [key: string]: {
-        from: number,
-        to?: number,
+        from: string,
+        to?: string,
     }
 };
 
@@ -21,8 +21,8 @@ export type EmployeeData = {
 
 export type PopulatedDayData = {
     employee: EmployeeData,
-    from: number,
-    to?: number,
+    from: string,
+    to?: string,
 }[]
 export default class Employee {
     constructor(public employeeId: string) { }
@@ -39,10 +39,10 @@ export default class Employee {
         }
     }
 
-    public makeAttendance(attendance: number) {
+    public makeAttendance(attendance: Date) {
         try {
             let data: DayData = Employee.getDayData();
-            data[this.employeeId] = { from: attendance };
+            data[this.employeeId] = { from: attendance.toString() };
             Employee.setDayData(data);
         }
         catch (err) {
@@ -50,12 +50,12 @@ export default class Employee {
         }
     }
 
-    public makeDeparture(departure: number) {
+    public makeDeparture(departure: Date) {
         try {
             const dayData = Employee.getDayData() as DayData;
             const employeeData = dayData[this.employeeId];
             if (employeeData) {
-                employeeData.to = departure;
+                employeeData.to = departure.toString();
                 dayData[this.employeeId] = employeeData;
                 Employee.setDayData(dayData);
             }
@@ -142,7 +142,7 @@ export default class Employee {
         const year = time.getFullYear();
         let month = time.getMonth() + 1;
         const day = time.getDate();
-        const folder = join(app.getAppPath(), "db", "attendance", year.toString(), month.toString());
+        const folder = join(app.getAppPath(), "../", "../", "db", "attendance", year.toString(), month.toString());
         const path = join(folder, day + ".json");
 
         try {
@@ -159,7 +159,7 @@ export default class Employee {
     }
 
     static getEmployeesFolder() {
-        const dir = join(app.getAppPath(), "db", "employees");
+        const dir = join(app.getAppPath(), "../", "../", "db", "employees");
         try {
             mkdirSync(dir, { recursive: true });
         }

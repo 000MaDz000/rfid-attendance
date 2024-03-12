@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
+import { EmployeeData } from "../../main/db-handler/employee";
 
-export default function CardDataTable({ cardId, cardData, withoutLink }: { withoutLink?: boolean, cardId: string, cardData: { [key: string]: string | undefined } }) {
+export default function EmployeeTable({ withoutLink, employee }: { withoutLink?: boolean, employee: EmployeeData }) {
+
     return (
         <table>
             <thead>
                 <tr>
-                    <th className="p-4 text-center">رقم الكارت</th>
+                    <th className="p-4 text-center">معرف الموظف</th>
                     <th className="p-4 text-center">الاسم</th>
                     <th className="p-4 text-center">العنوان</th>
                     <th className="p-4 text-center">الرقم القومي</th>
@@ -17,14 +19,14 @@ export default function CardDataTable({ cardId, cardData, withoutLink }: { witho
 
             <tbody>
                 <tr>
-                    <td className="p-4 text-center">{cardId}</td>
-                    <td className="p-4 text-center">{cardData.name || "-"}</td>
-                    <td className="p-4 text-center">{cardData.address || "-"}</td>
-                    <td className="p-4 text-center">{cardData.nationalId || "-"}</td>
-                    <td className="p-4 text-center">{cardData.branch || "-"}</td>
+                    <td className="p-4 text-center">{employee.id}</td>
+                    <td className="p-4 text-center">{employee?.name || "-"}</td>
+                    <td className="p-4 text-center">{employee?.address || "-"}</td>
+                    <td className="p-4 text-center">{employee?.nationalId || "-"}</td>
+                    <td className="p-4 text-center">{employee?.branch || "-"}</td>
                     {!withoutLink && (
                         <td className="text-center">
-                            <Link to={`/${cardId}`} className="p-4 text-md bg-blue-700 cursor-pointer text-white rounded-lg">
+                            <Link to={`/${employee.id}`} className="p-4 text-md bg-blue-700 cursor-pointer text-white rounded-lg">
                                 انتقال
                             </Link>
                         </td>

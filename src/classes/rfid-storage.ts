@@ -12,4 +12,12 @@ export default class RfidStorage {
         const result = await ipcRenderer.invoke("configure-card", id, employeeId);
         return result;
     }
+
+    static async getAllCards(): Promise<PopulatedCardData[]> {
+        return ipcRenderer.invoke("get-cards");
+    }
+
+    static async deleteCard(cardId: string) {
+        return ipcRenderer.invoke("delete-card", cardId);
+    }
 }

@@ -6,11 +6,13 @@ export default function ConfigureCard() {
     const { cardId } = useParams();
     const cardData = RfidStorage.getCardData(cardId as string);
     const navigate = useNavigate();
-    if (cardData) {
-        navigate("/" + cardId)
-    }
+    cardData.then(val => {
+        if (val.employee) {
+            navigate("/employee/" + val.employee.id);
+        }
+    })
     return (
-        <div className="h-screen flex items-center justify-center">
+        <div className="relative w-full h-full p-4 flex justify-center items-center">
             <CreateEmployeeForm id={cardId as string} />
         </div>
     )

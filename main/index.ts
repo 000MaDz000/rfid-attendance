@@ -1,6 +1,7 @@
 import { BrowserWindow, app } from "electron";
+import { join } from "path";
 import "./ipc-data-handler";
-
+console.log(app.getAppPath())
 const createWindow = () => {
     const window = new BrowserWindow({
         webPreferences: {
@@ -9,17 +10,26 @@ const createWindow = () => {
         }
     });
 
+
     if (process.env.NODE_ENV === "development") {
         window.loadURL("http://localhost:3000");
-        window.webContents.openDevTools({ "mode": "right" });
+        window.webContents.openDevTools();
     }
     else {
-        window.loadFile("../index.html")
+        console.log("node version:", process.versions.node);
+        window.loadURL("file://" + join(__dirname, "../index.html#/"));
     }
-
-    window.webContents.emit("rfid", "hello rfid");
 }
 
 app.whenReady().then(() => {
     createWindow();
-});
+})
+
+app.on("window-all-closed", () => {
+    try {
+        app.quit();
+    }
+    catch (err) {
+
+    }
+})

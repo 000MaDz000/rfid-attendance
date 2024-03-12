@@ -1,20 +1,17 @@
 {
   "name": "rfid-based-demo",
-  "main": "./public/electron.js",
+  "main": "./build/electron.js",
   "version": "0.1.0",
   "homepage": "./",
-  "private": true,
+  "engines": {
+    "node": "13.14.0"
+  },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.87",
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.21",
-    "global-key-listener": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.22.3",
@@ -26,8 +23,9 @@
   "scripts": {
     "start": "react-scripts start",
     "main": "cross-env NODE_ENV=development nodemon -w ./main/* --ext js,mjs,cjs,json,ts --exec electron .",
-    "build": "react-scripts build && tsc ./main/index.ts --outDir ./build/main",
+    "build": "react-scripts build && tsc ./main/index.ts --outDir ./build/main --esModuleInterop",
     "test": "react-scripts test",
+    "build-electron": "electron-builder",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -50,8 +48,13 @@
   },
   "devDependencies": {
     "@types/electron": "^1.6.10",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.25",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
     "cross-env": "^7.0.3",
-    "electron": "^22.3.27",
+    "electron": "^22.0.0",
+    "electron-builder": "^24.13.3",
     "nodemon": "^3.1.0",
     "react-router-dom": "^6.22.3",
     "ts-node": "^10.9.2"

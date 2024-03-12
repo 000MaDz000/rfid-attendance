@@ -9,7 +9,7 @@ ipcMain.handle("rfid-data", (_ev, id: string) => {
 });
 
 ipcMain.handle("configure-card", (_ev, cardId, employeeId) => {
-    new RfidCard(cardId).setCardData({ employee: employeeId });
+    new RfidCard(cardId).setCardData({ employee: employeeId, date: new Date().toString() });
     return true;
 });
 
@@ -23,19 +23,21 @@ ipcMain.handle("create-employee", (_ev, employeeData: EmployeeData) => {
     );
 });
 
+ipcMain.handle("get-employee-data", (_ev, id) => {
+    return new Employee(id).getEmployeeData();
+});
+
 ipcMain.handle("make-attendance", (_ev, employeeId) => {
     // store the attendance time as a floating point number
     const date = new Date();
-    const timeInFloat = date.getHours() + date.getMinutes() / 60 + date.getSeconds() / (24 * 60);
-    new Employee(employeeId).makeAttendance(timeInFloat);
+    new Employee(employeeId).makeAttendance(date);
     return true;
 });
 
 ipcMain.handle("make-departure", (_ev, employeeId) => {
     // store the attendance time as a floating point number
     const date = new Date();
-    const timeInFloat = date.getHours() + date.getMinutes() / 60 + date.getSeconds() / (24 * 60);
-    new Employee(employeeId).makeDeparture(timeInFloat);
+    new Employee(employeeId).makeDeparture(date);
     return true;
 });
 
@@ -54,3 +56,11 @@ ipcMain.handle("get-attendances", (_ev, data: { month: number, day?: number }) =
 ipcMain.handle("get-employees", () => {
     return Employee.getEmployees();
 })
+
+ipcMain.handle("get-cards", () => {
+    return RfidCard.getAllCards();
+})
+
+ipcMain.handle("delete-card", (_ev, cardId) => {
+    new RfidCard(cardId).deleteCard();
+}); 

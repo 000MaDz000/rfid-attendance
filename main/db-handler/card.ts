@@ -1,16 +1,18 @@
 import { app } from "electron"
 import { join } from "path"
 import Employee, { EmployeeData } from "./employee";
-import { mkdirSync, readFileSync, writeFileSync } from "fs";
+import { mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from "fs";
 
 export type CardData = {
     id: string;
     employee: string;
+    date: string;
 }
 
 export type PopulatedCardData = {
     employee: EmployeeData | null;
     id: string;
+    date: string;
 }
 
 export default class RfidCard {
@@ -21,7 +23,7 @@ export default class RfidCard {
 
 
     static getFolder() {
-        const folder = join(app.getAppPath(), "db", "cards");
+        const folder = join(app.getAppPath(), "../", "../", "db", "cards");
         try {
             mkdirSync(folder, { recursive: true });
         }
@@ -32,6 +34,18 @@ export default class RfidCard {
         return folder;
     }
 
+    static getAllCards() {
+        const folder = RfidCard.getFolder();
+        try {
+            const cards = readdirSync(folder);
+            return cards.map(card => {
+                return new RfidCard(card.slice(0, card.lastIndexOf(".json"))).getPopulatedCardData();
+            });
+        }
+        catch (err) {
+            return [];
+        }
+    }
     getCardPath() {
         return join(RfidCard.getFolder(), this.rfid + ".json");
     }
@@ -77,4 +91,15 @@ export default class RfidCard {
 
         return populated;
     }
+
+    deleteCard() {
+        const path = this.getCardPath();
+        try {
+            unlinkSync(path);
+        }
+        catch (err) {
+
+        }
+    }
+
 }
