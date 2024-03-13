@@ -47,7 +47,7 @@ export default function CardPage() {
                                 <tr>
                                     <td className="p-4 text-center">{card.id}</td>
                                     <td className="p-4 text-center">{card.employee?.name}</td>
-                                    <td className="p-4 text-center">{card.date || "-"}</td>
+                                    <td className="p-4 text-center">{new Date(card.date).toLocaleDateString() || "-"}</td>
                                     <td className="p-2">
                                         <button className="p-4 text-center  bg-blue-600 whitespace-nowrap text-white font-semibold rounded-lg" onClick={() => deleteCard(card.id)}>حذف بيانات الكارت</button>
                                     </td>

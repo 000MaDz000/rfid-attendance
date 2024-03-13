@@ -1,7 +1,7 @@
 import { BrowserWindow, app } from "electron";
 import { join } from "path";
 import "./ipc-data-handler";
-console.log(app.getAppPath())
+
 const createWindow = () => {
     const window = new BrowserWindow({
         webPreferences: {

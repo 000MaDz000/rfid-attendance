@@ -30,11 +30,12 @@ export default class Employee {
 
         if (employee) {
             console.log("departure");
-
-            return this.makeDeparture();
+            await this.makeDeparture();
+            return "departure";
         }
         else {
-            return await ipcRenderer.invoke("make-attendance", this.id);
+            await ipcRenderer.invoke("make-attendance", this.id);
+            return "attendance";
         }
 
 

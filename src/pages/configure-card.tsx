@@ -8,7 +8,7 @@ export default function ConfigureCard() {
     const navigate = useNavigate();
     cardData.then(val => {
         if (val.employee) {
-            navigate("/employee/" + val.employee.id);
+            navigate("/");
         }
     })
     return (

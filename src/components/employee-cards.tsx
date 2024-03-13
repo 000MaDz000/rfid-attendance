@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react"
-import { PopulatedCardData } from "../../main/db-handler/card"
 import RfidStorage from "../classes/rfid-storage";
 import Modal from "./modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

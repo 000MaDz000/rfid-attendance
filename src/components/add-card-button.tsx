@@ -3,11 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useState } from "react";
 import Modal from "./modal";
 import useRfid from "../hooks/use-rfid";
-import { PopulatedCardData } from "../../main/db-handler/card";
 import RfidStorage from "../classes/rfid-storage";
 import EmployeeCardsContext from "../contexts/employee-cards";
 
-export default function AddCardButton({ className, employeeId }: { className?: string, employeeId: string, }) {
+export default function AddCardButton({ employeeId }: { className?: string, employeeId: string, }) {
     const [isClicked, setIsClicked] = useState(false);
     const { cards, setCards } = useContext(EmployeeCardsContext);
     const rfid = useRfid();
@@ -21,7 +20,7 @@ export default function AddCardButton({ className, employeeId }: { className?: s
             setCards([...cards, data]);
         })
 
-    }, [rfid, employeeId]);
+    }, [rfid, employeeId,]);
     return (
         <div>
             <FontAwesomeIcon icon={faPlus} title="اضافة كارت" className="cursor-pointer" onClick={() => setIsClicked(true)} />
