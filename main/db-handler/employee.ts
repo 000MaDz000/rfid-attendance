@@ -7,7 +7,7 @@ export type DayData = {
     [key: string]: {
         from: string,
         to?: string,
-    }
+    }[]
 };
 
 export type EmployeeData = {
@@ -21,8 +21,10 @@ export type EmployeeData = {
 
 export type PopulatedDayData = {
     employee: EmployeeData,
-    from: string,
-    to?: string,
+    data: {
+        from: string,
+        to?: string,
+    }[]
 }[]
 export default class Employee {
     constructor(public employeeId: string) { }
@@ -42,7 +44,25 @@ export default class Employee {
     public makeAttendance(attendance: Date) {
         try {
             let data: DayData = Employee.getDayData();
-            data[this.employeeId] = { from: attendance.toString() };
+            let employeeAttendances = data[this.employeeId];
+
+            if (!employeeAttendances || !employeeAttendances.length) {
+                data[this.employeeId] = [
+                    {
+                        "from": attendance.toString(),
+                    }
+                ];
+            }
+            else if (!(employeeAttendances[employeeAttendances.length - 1].to)) {
+                this.makeDeparture(attendance);
+                return;
+            }
+            else {
+                data[this.employeeId].push({
+                    "from": attendance.toString(),
+                });
+            }
+
             Employee.setDayData(data);
         }
         catch (err) {
@@ -52,11 +72,12 @@ export default class Employee {
 
     public makeDeparture(departure: Date) {
         try {
-            const dayData = Employee.getDayData() as DayData;
-            const employeeData = dayData[this.employeeId];
-            if (employeeData) {
-                employeeData.to = departure.toString();
-                dayData[this.employeeId] = employeeData;
+            const dayData = Employee.getDayData();
+            const employeeAttendances = dayData[this.employeeId];
+
+            if (employeeAttendances && employeeAttendances.length) {
+                const lastAttendanceObject = employeeAttendances[employeeAttendances.length - 1];
+                dayData[this.employeeId][employeeAttendances.length - 1] = { ...lastAttendanceObject, "to": departure.toString() };
                 Employee.setDayData(dayData);
             }
 
@@ -74,6 +95,7 @@ export default class Employee {
             writeFileSync(path, JSON.stringify(data));
         }
         catch (err) {
+            console.log(err);
 
         }
     }
@@ -108,12 +130,12 @@ export default class Employee {
     static getPoulatedDayData(...params: any) {
         const data = this.getDayData(...params);
         const populated: PopulatedDayData = [];
+
         for (const key in data) {
             const populatedEmployee = {
                 employee: new Employee(key).getEmployeeData(),
-                from: data[key].from,
-                to: data[key].to,
-            }
+                data: data[key] || [],
+            };
 
             populated.push(populatedEmployee as any);
         }
