@@ -44,7 +44,7 @@ export default function CardPage() {
                     <tbody>
                         {
                             cards.map(card => (
-                                <tr>
+                                <tr key={card.id}>
                                     <td className="p-4 text-center">{card.id}</td>
                                     <td className="p-4 text-center">{card.employee?.name}</td>
                                     <td className="p-4 text-center">{new Date(card.date).toLocaleDateString() || "-"}</td>
