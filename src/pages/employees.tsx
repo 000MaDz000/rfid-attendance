@@ -28,15 +28,15 @@ export default function EmployeesPage() {
 
                 <tbody>
                     {
-                        data.map(cardData => {
+                        data.map(employee => {
                             return (
-                                <tr>
-                                    <td className="p-4 text-center text-md">{cardData.name}</td>
-                                    <td className="p-4 text-center text-md">{cardData.address || "-"}</td>
-                                    <td className="p-4 text-center text-md">{cardData.birthDate ? new Date(cardData.birthDate).toLocaleDateString("ar-SA") : "-"}</td>
-                                    <td className="p-4 text-center text-md">{cardData.nationalId || "-"}</td>
+                                <tr key={employee.id}>
+                                    <td className="p-4 text-center text-md">{employee.name}</td>
+                                    <td className="p-4 text-center text-md">{employee.address || "-"}</td>
+                                    <td className="p-4 text-center text-md">{employee.birthDate ? new Date(employee.birthDate).toLocaleDateString("ar-SA") : "-"}</td>
+                                    <td className="p-4 text-center text-md">{employee.nationalId || "-"}</td>
                                     <td className="text-center">
-                                        <Link to={`/employees/${cardData.id}`} className="p-4 text-md bg-blue-700 cursor-pointer text-white rounded-lg">
+                                        <Link to={`/employees/${employee.id}`} className="p-4 text-md bg-blue-700 cursor-pointer text-white rounded-lg">
                                             انتقال
                                         </Link>
                                     </td>
