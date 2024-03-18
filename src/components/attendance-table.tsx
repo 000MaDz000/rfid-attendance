@@ -3,6 +3,7 @@ import { useParams } from "react-router"
 import Employee from "../classes/employee";
 import { PopulatedDayData } from "../../main/db-handler/employee";
 import numberToTime from "../functions/number-to-time";
+import resolveTime, { timeToString } from "../functions/resolve-time";
 
 export default function AttendanceTable() {
     const { employeeId } = useParams();
@@ -22,6 +23,10 @@ export default function AttendanceTable() {
         })
     }, [data])();
 
+    let totalMonthHours = 0;
+    let totalMonthMinutes = 0;
+    let totalMonthSeconds = 0;
+
     return (
 
         <table className="border-separate border-spacing-2 [&_td]:text-center [&_td]:p-4 [&_th]:text-center [&_th]:p-4">
@@ -38,9 +43,9 @@ export default function AttendanceTable() {
                 {
                     // here we iterate all attendances objects of the employee
                     employeeData.map((val, i) => {
-                        let totalHours = 0;
-                        let totalMinutes = 0;
-                        let totalSeconds = 0;
+                        let totalDayHours = 0;
+                        let totalDayMinutes = 0;
+                        let totalDaySeconds = 0;
 
                         // if there is no data in this day, just ignore it
                         if (!val?.data.length) {
@@ -68,9 +73,14 @@ export default function AttendanceTable() {
                                     const minutes = defference.getUTCMinutes();
                                     const seconds = defference.getUTCSeconds();
                                     const defStr = `${numberToTime(hours)}:${numberToTime(minutes)}:${numberToTime(seconds)}`;
-                                    totalHours += hours;
-                                    totalMinutes += minutes;
-                                    totalSeconds += seconds;
+                                    totalDayHours += hours;
+                                    totalDayMinutes += minutes;
+                                    totalDaySeconds += seconds;
+
+                                    // add month hours, minutes, seconds
+                                    totalMonthHours += isNaN(hours) ? 0 : hours;
+                                    totalMonthMinutes += isNaN(minutes) ? 0 : minutes;
+                                    totalMonthSeconds += isNaN(seconds) ? 0 : seconds;
 
                                     // render (attendance, departure, total) times
                                     return (
@@ -78,24 +88,29 @@ export default function AttendanceTable() {
                                             <td>{startData.toLocaleTimeString()}</td>
                                             <td>{val.to ? endDate.toLocaleTimeString() : "-"}</td>
                                             <td>{(val.to && val.from) ? defStr : "-"}</td>
+
                                         </tr>
                                     )
                                 })}
 
-                                {/* render the total horse of the day */}
-                                {
-                                    val?.data.length ? (
-                                        <tr >
-                                            <td></td>
-                                            <td></td>
-                                            <td className="font-semibold">{`${numberToTime(totalHours)}:${numberToTime(totalMinutes)}:${numberToTime(totalSeconds)}`}</td>
-                                        </tr>
-                                    ) : ""
-                                }
+
+                                {/* total day Hours */}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{timeToString(resolveTime({ hours: totalDayHours, minutes: totalDayMinutes, seconds: totalDaySeconds }))}</td>
+                                </tr>
                             </Fragment>
                         )
                     })
                 }
+
+                <tr>
+                    <td className="bg-slate-50">اجمالي الساعات</td>
+                    <td></td>
+                    <td></td>
+                    <td>{timeToString(resolveTime({ hours: totalMonthHours, minutes: totalMonthMinutes, seconds: totalMonthSeconds }))}</td>
+                </tr>
             </tbody>
         </table>
 
