@@ -6,6 +6,8 @@
   "engines": {
     "node": "13.14.0"
   },
+  "author": "MaDz",
+  "description": "RFID Attendance system",
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -25,7 +27,8 @@
     "main": "cross-env NODE_ENV=development nodemon -w ./main/* --ext js,mjs,cjs,json,ts --exec electron .",
     "build": "react-scripts build && tsc ./main/index.ts --outDir ./build/main --esModuleInterop",
     "test": "react-scripts test",
-    "build-electron": "electron-builder",
+    "b-win-64": "electron-builder --win --x64",
+    "b-win-32": "electron-builder --win --ia32",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
