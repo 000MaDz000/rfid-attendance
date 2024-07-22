@@ -28,36 +28,22 @@ export default class Employee {
             return val.employee.id === this.id;
         });
 
-        if (employee) {
-            console.log("departure");
-            await this.makeDeparture();
-            return "departure";
+        await ipcRenderer.invoke("make-attendance", this.id);
+
+        // check if the last attendance object marked with to property
+        // if not, will return "departure" else will return "attendace"
+        const employeeData = employee?.data;
+
+        if (employeeData) {
+            if (employeeData[employeeData.length - 1].to) {
+                return "attendance";
+            }
+            else {
+                return "departure";
+            }
         }
         else {
-            await ipcRenderer.invoke("make-attendance", this.id);
             return "attendance";
         }
-
-
-        // const employeeId = this.id;
     }
-
-    async makeDeparture() {
-        const date = new Date();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const attendances = await Employee.getAttendances(month, day) as PopulatedDayData;
-        const employee = attendances.find((val) => {
-            return val.employee.id === this.id;
-        });
-
-        // window.require("console").log(employee);
-        if (employee && employee.to) {
-            return false;
-        }
-        else {
-            await ipcRenderer.invoke("make-departure", this.id);
-        }
-    }
-
 }

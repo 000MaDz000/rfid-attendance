@@ -6,6 +6,9 @@ export default function useRfid() {
     useEffect(() => {
         const listener: RfidListener = (ev) => {
             setState(ev.id);
+            setTimeout(() => {
+                setState(null);
+            }, 1000);
         };
 
         RfidEventListener.addListener(listener);
